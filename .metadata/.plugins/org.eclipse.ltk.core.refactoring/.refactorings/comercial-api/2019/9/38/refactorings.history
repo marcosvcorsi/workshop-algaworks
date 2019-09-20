@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;comercial-api/src/main/resources/db/migration/V01__create_table_oportunidade&apos; to &apos;V01__create_table_oportunidade.sql&apos;" description="Rename resource &apos;V01__create_table_oportunidade&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/main/resources/db/migration/V01__create_table_oportunidade" name="V01__create_table_oportunidade.sql" stamp="1568942120152" updateReferences="true"/>
+</session>
