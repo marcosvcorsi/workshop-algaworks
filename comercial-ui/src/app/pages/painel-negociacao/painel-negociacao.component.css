@@ -1,0 +1,8 @@
+.panel-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.panel-container div {
+    margin: 10px;
+}

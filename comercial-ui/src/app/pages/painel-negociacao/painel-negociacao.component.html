@@ -1,0 +1,35 @@
+<p-panel header="Nova oportunidade">
+  <div class="panel-container"> 
+    <div>
+      <input pInputText type="text" placeholder="Descrição" [(ngModel)]="oportunidade.descricao" />
+    </div>
+    <div>
+      <input pInputText type="text" placeholder="Prospecto" [(ngModel)]="oportunidade.nomeProspecto" />
+    </div>
+    <div>
+      <input pInputText type="number" placeholder="Valor" [(ngModel)]="oportunidade.valor" />
+    </div>
+    <div>
+      <button pButton type="submit" label="Adicionar" (click)="add()">
+      </button>
+    </div>
+  </div>
+</p-panel>
+<br />
+<p-table [value]="oportunidades">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Descrição</th>
+      <th>Prospecto</th>
+      <th>Valor</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-op>
+    <tr>
+      <td>{{op.descricao}}</td>
+      <td>{{op.nomeProspecto}}</td>
+      <td>{{op.valor}}</td>
+    </tr>
+  </ng-template>
+</p-table>
