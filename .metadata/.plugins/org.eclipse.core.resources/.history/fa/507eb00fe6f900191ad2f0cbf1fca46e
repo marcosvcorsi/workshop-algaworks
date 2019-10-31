@@ -1,0 +1,48 @@
+package com.algaworks.comercial;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import com.algaworks.comercial.model.Oportunidade;
+import com.algaworks.comercial.repository.OportunidadeRepository;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class OportunidadeRepositoryTest {
+
+	@Autowired
+	private OportunidadeRepository oportunidadeRepository;
+	
+	@Test
+	public void findAllTest() {
+		List<Oportunidade> oportunidades = oportunidadeRepository.findAll();
+		
+		assertThat(oportunidades).isNotEmpty();
+	}
+	
+	@Test
+	public void saveTest() {
+		Oportunidade oportunidade = new Oportunidade();
+		oportunidade.setDescricao("Descrição oportunidade");
+		oportunidade.setNomeProspecto("Prospecto teste");
+		oportunidade.setValor(new BigDecimal(100));
+		
+		oportunidadeRepository.save(oportunidade);
+	}
+	
+	@Test
+	public void checkIfExistsTest() {
+		Oportunidade oportunidade = oportunidadeRepository.findByDescricao("Descrição Oportunidade");
+		
+		assertThat(oportunidade.getDescricao()).isEqualToIgnoringCase("Descrição Oportunidade");
+	}
+}

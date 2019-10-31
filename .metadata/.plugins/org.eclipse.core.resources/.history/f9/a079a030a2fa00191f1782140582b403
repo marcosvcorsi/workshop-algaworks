@@ -1,0 +1,52 @@
+package com.algaworks.comercial.services;
+
+import java.util.List;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.algaworks.comercial.dto.OportunidadeDTO;
+import com.algaworks.comercial.model.Oportunidade;
+import com.algaworks.comercial.repository.OportunidadeRepository;
+
+@Service
+public class OportunidadeService {
+	
+	@Autowired
+	private OportunidadeRepository oportunidadeRepository;
+	
+	public List<Oportunidade> findAll() {
+		return oportunidadeRepository.findAll();
+	}
+	
+	public Oportunidade get(Long id) {
+		return oportunidadeRepository.find(id);
+	}
+	
+	public Oportunidade edit(Long id, OportunidadeDTO dto) {
+		Oportunidade oportunidade = oportunidadeRepository.find(id);
+		
+		BeanUtils.copyProperties(dto, oportunidade);
+		
+		oportunidadeRepository.save(oportunidade);
+		
+		return oportunidade;
+	}
+	
+	public void delete(Long id){
+		oportunidadeRepository.deleteById(id);
+	}
+	
+	public Oportunidade save(Oportunidade oportunidade) {
+		Oportunidade oportunidadeExistente = oportunidadeRepository.findByDescricaoAndNomeProspecto(
+				oportunidade.getDescricao(), oportunidade.getNomeProspecto());
+		
+		if(oportunidadeExistente != null) {
+			return oportunidadeExistente;
+		}
+		
+		return oportunidadeRepository.save(oportunidade);
+	}
+
+}

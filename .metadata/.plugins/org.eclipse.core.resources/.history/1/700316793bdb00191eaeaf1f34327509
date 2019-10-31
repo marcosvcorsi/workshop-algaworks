@@ -1,8 +1,0 @@
-package com.algaworks.comercial.controller;
-
-public class OportunidadeController {
-
-	public String listar() {
-		return "Hello World";
-	}
-}

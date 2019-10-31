@@ -1,11 +1,9 @@
 package com.algaworks.comercial.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.algaworks.comercial.dto.OportunidadeDTO;
 import com.algaworks.comercial.model.Oportunidade;
-import com.algaworks.comercial.repository.OportunidadeRepository;
+import com.algaworks.comercial.services.OportunidadeService;
 
 @CrossOrigin
 @RestController
@@ -31,44 +28,40 @@ import com.algaworks.comercial.repository.OportunidadeRepository;
 public class OportunidadeController {
 	
 	@Autowired
-	private OportunidadeRepository oportunidadeRepository;
+	private OportunidadeService oportunidadeService;
 
 	@GetMapping
-	public List<Oportunidade> list() {
-		return oportunidadeRepository.findAll();
+	public ResponseEntity<List<Oportunidade>>list() {
+		List<Oportunidade> oportunidades = oportunidadeService.findAll();
+		
+		return ResponseEntity.ok(oportunidades);
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Oportunidade> get(@PathVariable Long id) {
-		Optional<Oportunidade> oportunidade = oportunidadeRepository.findById(id);
+		Oportunidade oportunidade = oportunidadeService.get(id);
 		
-		if(oportunidade.isEmpty()) {
+		if(oportunidade == null) {
 			return ResponseEntity.notFound().build();
 		}
 		
-		return ResponseEntity.ok(oportunidade.get());
+		return ResponseEntity.ok(oportunidade);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Oportunidade> edit(@PathVariable Long id, @RequestBody OportunidadeDTO dto) {
-		Optional<Oportunidade> op = oportunidadeRepository.findById(id);
+	public ResponseEntity<Oportunidade> edit(@PathVariable Long id, @RequestBody OportunidadeDTO dto) {	
+		Oportunidade oportunidade = oportunidadeService.edit(id, dto);
 		
-		if(op.isEmpty()) {
+		if(oportunidade == null) {
 			return ResponseEntity.notFound().build();
 		}
-		
-		Oportunidade oportunidade = op.get();
-		
-		BeanUtils.copyProperties(dto, oportunidade);
-		
-		oportunidadeRepository.save(oportunidade);
 		
 		return ResponseEntity.ok().body(oportunidade);
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Oportunidade> delete(@PathVariable Long id){
-		oportunidadeRepository.deleteById(id);
+		oportunidadeService.delete(id);
 		
 		return ResponseEntity.ok().build();
 	}
@@ -76,16 +69,7 @@ public class OportunidadeController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Oportunidade save(@Valid @RequestBody Oportunidade oportunidade) {
-		Optional<Oportunidade> oportunidadeExistente = oportunidadeRepository.findByDescricaoAndNomeProspecto(
-				oportunidade.getDescricao(), oportunidade.getNomeProspecto());
-		
-		if(oportunidadeExistente.isPresent()) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, 
-					"Já existe uma oportunidade para este prospecto e esta descrição");
-		}
-		
-		return oportunidadeRepository.save(oportunidade);
+		return oportunidadeService.save(oportunidade);
 	}
 
-	/* TO-DO update and delete and lombok */
 }

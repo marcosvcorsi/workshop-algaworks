@@ -37,6 +37,14 @@ public class Oportunidade {
 	@Column(name = "valor")
 	private BigDecimal valor;
 
+	public Oportunidade() {}
+	
+	public Oportunidade(String nomeProspecto, String descricao, BigDecimal valor) {
+		this.nomeProspecto = nomeProspecto;
+		this.descricao = descricao;
+		this.valor = valor;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

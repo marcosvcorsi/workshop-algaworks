@@ -1,0 +1,65 @@
+package com.algaworks.comercial.services;
+
+import java.util.List;
+import java.util.Optional;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.server.ResponseStatusException;
+
+import com.algaworks.comercial.dto.OportunidadeDTO;
+import com.algaworks.comercial.model.Oportunidade;
+import com.algaworks.comercial.repository.OportunidadeRepository;
+
+@Service
+public class OportunidadeService {
+	
+	@Autowired
+	private OportunidadeRepository oportunidadeRepository;
+	
+	public List<Oportunidade> list() {
+		return oportunidadeRepository.findAll();
+	}
+	
+	public Oportunidade get(Long id) {
+		return oportunidadeRepository.find(id);
+	}
+	
+	public Oportunidade edit(Long id, OportunidadeDTO dto) {
+		Oportunidade oportunidade = oportunidadeRepository.find(id);
+		
+		BeanUtils.copyProperties(dto, oportunidade);
+		
+		oportunidadeRepository.save(oportunidade);
+		
+		return oportunidade;
+	}
+	
+	public void delete(Long id){
+		oportunidadeRepository.deleteById(id);
+	}
+	
+	public Oportunidade save(Oportunidade oportunidade) {
+		Oportunidade oportunidadeExistente = oportunidadeRepository.findByDescricaoAndNomeProspecto(
+				oportunidade.getDescricao(), oportunidade.getNomeProspecto());
+		
+		if(oportunidadeExistente != null) {
+			return oportunidadeExistente;
+		}
+		
+		return oportunidadeRepository.save(oportunidade);
+	}
+
+}

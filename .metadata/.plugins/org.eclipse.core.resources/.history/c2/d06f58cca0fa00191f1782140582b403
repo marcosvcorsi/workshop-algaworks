@@ -1,0 +1,15 @@
+package com.algaworks.comercial.repository;
+
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.algaworks.comercial.model.Oportunidade;
+
+public interface OportunidadeRepository extends JpaRepository<Oportunidade, Long>{
+
+	Oportunidade findByDescricaoAndNomeProspecto(String descricao, String nomeProspecto);
+	
+	Oportunidade findByDescricao(String descricao);
+	
+}
